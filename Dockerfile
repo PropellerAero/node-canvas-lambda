@@ -1,15 +1,15 @@
-FROM arm64v8/amazonlinux:latest
+FROM amd64/amazonlinux
 
 ARG OUT=/root/layers
-ARG NODE_VERSION=16
+ARG NODE_VERSION=20
 
 # set up container
 RUN yum -y update \
 && yum -y groupinstall "Development Tools" \
-&& curl --silent --location https://rpm.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+&& curl --silent -fsSL https://rpm.nodesource.com/setup_${NODE_VERSION}.x | bash - \
 && yum install -y \
 	nodejs \
-	python37 \
+	python3 \
 	which \
 	binutils \
 	sed \
@@ -23,10 +23,7 @@ RUN yum -y update \
 WORKDIR $OUT/nodejs
 
 RUN npm install --build-from-source \
-canvas@2 \
-chartjs-plugin-datalabels@2 \
-chartjs-node-canvas@4 \
-chart.js@3
+canvas@2
 
 # will be created and become working dir
 WORKDIR $OUT/lib
